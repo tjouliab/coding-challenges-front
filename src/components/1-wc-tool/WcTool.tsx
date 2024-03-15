@@ -1,3 +1,5 @@
+import './WcTool.css';
+
 function WcTool() {
   return (
     <>
