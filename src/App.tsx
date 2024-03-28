@@ -1,7 +1,7 @@
-import './App.css';
-import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
-import React from 'react';
-import { EXERCICE_LIST } from './ExerciseList';
+import "./App.css";
+import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
+import React from "react";
+import { EXERCICE_LIST } from "./ExerciseList";
 
 export interface Exercice {
   component: () => JSX.Element;
@@ -15,13 +15,13 @@ function App() {
 
   return (
     <BrowserRouter>
-      <div className='app-container'>
-        <div className='sidebar'>
-          <nav style={{ margin: '1rem' }}>
-            <ul className='list-group'>
+      <div className="app-container">
+        <div className="sidebar">
+          <nav style={{ margin: "1rem" }}>
+            <ul className="list-group">
               {exerciceList.map((exercice) => (
-                <li className='list-group-item' key={exercice.path}>
-                  <a className='nav-link' href={exercice.path}>
+                <li className="list-group-item" key={exercice.path}>
+                  <a className="nav-link" href={exercice.path}>
                     {exercice.componentName}
                   </a>
                 </li>
@@ -29,7 +29,7 @@ function App() {
             </ul>
           </nav>
         </div>
-        <div className='content'>
+        <div className="content">
           <Routes>
             {exerciceList.map((exercice) => (
               <Route
@@ -38,7 +38,7 @@ function App() {
                 element={React.createElement(exercice.component)}
               />
             ))}
-            <Route path='*' element={<Navigate to='/' />} />
+            <Route path="*" element={<Navigate to="/" />} />
           </Routes>
         </div>
       </div>
