@@ -31,3 +31,7 @@
 .form-control {
   resize: none;
 }
+
+.count-btn {
+  margin-top: 1vh;
+}
