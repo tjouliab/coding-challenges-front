@@ -1,6 +1,12 @@
-import { REACT_APP_BASE_URL } from "../../EnvironmentVariables";
+import { REACT_APP_BASE_URL } from '../../../EnvironmentVariables';
 
 export interface FileDto {
+  id: string;
+  name: string;
+}
+
+export interface FileWithContentDto {
+  id: string;
   name: string;
   startContent: string;
   endContent: string;
@@ -9,7 +15,7 @@ export interface FileDto {
 const baseUrl = `${REACT_APP_BASE_URL}/wc-tool`;
 
 export const WcToolService = {
-  getAllFilesNames: async (): Promise<string[]> => {
+  getAllFiles: async (): Promise<FileDto[]> => {
     try {
       return (await fetch(`${baseUrl}/all-files-names`)).json();
     } catch (error) {
@@ -17,9 +23,9 @@ export const WcToolService = {
     }
   },
 
-  getFileByName: async (fileName: string): Promise<FileDto> => {
+  getFileById: async (fileId: string): Promise<FileWithContentDto> => {
     try {
-      return (await fetch(`${baseUrl}/file-by-name?name=${fileName}`)).json();
+      return (await fetch(`${baseUrl}/file-by-id?id=${fileId}`)).json();
     } catch (error) {
       throw new Error(error as string);
     }

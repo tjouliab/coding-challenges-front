@@ -1,85 +1,90 @@
-import { useEffect, useState } from "react";
-import { FileDto, WcToolService } from "../../services/WcToolService";
-import "./WcTool.css";
+import { useEffect, useState } from 'react';
+import { FileDto, FileWithContentDto, WcToolService } from './WcToolService';
+import './WcTool.css';
 
 function WcTool() {
-  const [fileNames, setFileNames] = useState<string[]>([]);
-  const [selectedFileName, setSelectedFileName] = useState<string>("");
+  const [files, setFiles] = useState<FileDto[]>([]);
   const [selectedFile, setSelectedFile] = useState<FileDto>();
+  const [selectedFileWithContent, setSelectedFileWithContent] =
+    useState<FileWithContentDto>();
 
   useEffect((): void => {
-    WcToolService.getAllFilesNames()
-      .then((res) => {
-        setFileNames(res);
+    WcToolService.getAllFiles()
+      .then((res: FileDto[]) => {
+        setFiles(res);
       })
-      .catch((error) => console.error("Error fetching data:", error));
-  });
+      .catch((error) => console.error('Error fetching data:', error));
+  }, []);
 
-  function handleOptionClick(fileName: string): void {
-    setSelectedFileName(fileName);
-    WcToolService.getFileByName(fileName)
-      .then((res: FileDto) => {
-        setSelectedFile(res);
+  function handleOptionClick(file: FileDto): void {
+    setSelectedFile(file);
+    WcToolService.getFileById(file.id)
+      .then((res: FileWithContentDto) => {
+        setSelectedFileWithContent(res);
       })
-      .catch((error) => console.error("Error fetching data:", error));
+      .catch((error) => console.error('Error fetching data:', error));
   }
 
   function getTextToDisplay(startContent: string, endContent: string): string {
-    return `${startContent} ${endContent ? `[...] ${endContent}` : ""}`;
+    return `${startContent} ${endContent ? `\n[...]\n${endContent}` : ''}`;
   }
 
   return (
     <>
-      <div className="exercice-container">
+      <div className='exercice-container'>
         <h1>Word Count Tool</h1>
-        <div className="actions-container">
-          <div className="dropdown">
+        <div className='actions-container'>
+          <div className='dropdown'>
             <button
-              className="btn btn-secondary dropdown-toggle"
-              type="button"
-              id="dropdownMenuButton"
-              data-bs-toggle="dropdown"
-              aria-expanded="false"
+              className='btn btn-secondary dropdown-toggle'
+              type='button'
+              id='dropdownMenuButton'
+              data-bs-toggle='dropdown'
+              aria-expanded='false'
             >
               Select a file
             </button>
-            <ul className="dropdown-menu" aria-labelledby="dropdownMenuButton">
-              {fileNames.map((fileName) => (
-                <li key={fileName}>
+            <ul className='dropdown-menu' aria-labelledby='dropdownMenuButton'>
+              {files.map((file) => (
+                <li key={file.id}>
                   <a
                     className={`dropdown-item ${
-                      selectedFileName === fileName ? "active" : ""
+                      selectedFile === file ? 'active' : ''
                     }`}
-                    href="#"
-                    onClick={() => handleOptionClick(fileName)}
+                    href='#'
+                    onClick={() => handleOptionClick(file)}
                   >
-                    {fileName}
+                    {file.name}
                   </a>
                 </li>
               ))}
             </ul>
           </div>
-          <h4 className="text-separator">OR</h4>
-          <button className="btn btn-secondary" type="button">
+          <h4 className='text-separator'>OR</h4>
+          <button className='btn btn-secondary' type='button'>
             Download
           </button>
         </div>
 
-        {selectedFile ? (
-          <div className="input-group">
-            <span className="input-group-text">{selectedFile.name}</span>
-            <textarea
-              readOnly
-              className="form-control"
-              aria-label="With textarea"
-              value={getTextToDisplay(
-                selectedFile.startContent,
-                selectedFile.endContent
-              )}
-            ></textarea>
-          </div>
+        {selectedFileWithContent ? (
+          <>
+            <div className='input-group'>
+              <span className='input-group-text'>
+                {selectedFileWithContent.name}
+              </span>
+              <textarea
+                readOnly
+                className='form-control'
+                aria-label='With textarea'
+                value={getTextToDisplay(
+                  selectedFileWithContent.startContent,
+                  selectedFileWithContent.endContent
+                )}
+              ></textarea>
+            </div>
+          </>
         ) : (
-          ""
+          ''
         )}
       </div>
     </>

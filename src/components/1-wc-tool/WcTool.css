@@ -10,6 +10,7 @@
   align-items: center;
   gap: 3vw;
   padding-top: 5vh;
+  padding-bottom: 3vh;
 }
 
 .text-separator {
@@ -21,4 +22,12 @@
   resize: none;
 }
 
-/* .form-control:focus {} */
+.input-group {
+  height: 20vh;
+  width: 100%;
+  padding-bottom: 3vh;
+}
+
+.form-control {
+  resize: none;
+}
