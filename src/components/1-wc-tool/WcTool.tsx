@@ -20,18 +20,20 @@ export interface FileOptions {
   lines: FileOption;
 }
 
+const DEFAULT_OPTIONS: FileOptions = {
+  byte: { activated: false, count: 0, displayText: "Bytes" },
+  chars: { activated: false, count: 0, displayText: "Chars" },
+  words: { activated: false, count: 0, displayText: "Words" },
+  lines: { activated: false, count: 0, displayText: "Lines" },
+};
+
 function WcTool() {
   const [files, setFiles] = useState<FileDto[]>([]);
   const [selectedFile, setSelectedFile] = useState<FileDto>();
   const [selectedFileWithContent, setSelectedFileWithContent] =
     useState<FileWithContentDto>();
   const [countDisabled, setCountDisabled] = useState<boolean>(true);
-  const [options, setOptions] = useState<FileOptions>({
-    byte: { activated: false, count: 0, displayText: "Bytes" },
-    chars: { activated: false, count: 0, displayText: "Chars" },
-    words: { activated: false, count: 0, displayText: "Words" },
-    lines: { activated: false, count: 0, displayText: "Lines" },
-  });
+  const [options, setOptions] = useState<FileOptions>(DEFAULT_OPTIONS);
 
   useEffect((): void => {
     WcToolService.getAllFiles()
@@ -50,6 +52,7 @@ function WcTool() {
   }, [options]);
 
   function handleOptionClick(file: FileDto): void {
+    setOptions(DEFAULT_OPTIONS);
     setSelectedFile(file);
     WcToolService.getFileById(file.id)
       .then((res: FileWithContentDto) => {
@@ -69,7 +72,6 @@ function WcTool() {
         Object.entries(res.data).map(([key, value]: [string, number]) => {
           (newOptions as any)[key].count = value;
         });
-        console.log("newOptions", newOptions);
         setOptions(newOptions);
       })
       .catch((error) => console.error("Error fetching data:", error));
@@ -104,7 +106,7 @@ function WcTool() {
                 <li key={file.id}>
                   <a
                     className={`dropdown-item ${
-                      selectedFile === file ? "active" : ""
+                      selectedFile === file && "active"
                     }`}
                     href="#"
                     onClick={() => handleOptionClick(file)}
@@ -121,7 +123,7 @@ function WcTool() {
           </button>
         </div>
 
-        {selectedFileWithContent ? (
+        {selectedFileWithContent && (
           <>
             <div className="input-group">
               <span className="input-group-text">
@@ -177,8 +179,6 @@ function WcTool() {
               Count
             </button>
           </>
-        ) : (
-          ""
         )}
       </div>
     </>

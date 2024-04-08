@@ -1,5 +1,5 @@
 import { REACT_APP_BASE_URL } from "../../../EnvironmentVariables";
-import { FileOptions } from "./wc-tool-options/WcToolOptions";
+import { FileOptions } from "./WcTool";
 
 export interface FileDto {
   id: string;
