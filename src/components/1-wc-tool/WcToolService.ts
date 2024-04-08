@@ -1,5 +1,5 @@
-import { REACT_APP_BASE_URL } from '../../../EnvironmentVariables';
-import { FileOptions } from './wc-tool-options/WcToolOptions';
+import { REACT_APP_BASE_URL } from "../../../EnvironmentVariables";
+import { FileOptions } from "./wc-tool-options/WcToolOptions";
 
 export interface FileDto {
   id: string;
@@ -15,10 +15,12 @@ export interface FileWithContentDto {
 
 export interface FileCountResultDto {
   id: string;
-  byteCount: number;
-  charsCount: number;
-  wordsCount: number;
-  linesCount: number;
+  data: {
+    byte: number;
+    chars: number;
+    words: number;
+    lines: number;
+  };
 }
 
 const baseUrl = `${REACT_APP_BASE_URL}/wc-tool`;
@@ -54,10 +56,10 @@ export const WcToolService = {
           `${baseUrl}/file-properties-by-id?${new URLSearchParams({
             id: fileId,
             // '0' or '1' because can't use URLSearchParams with booleans
-            byte: fileOptions.byte ? '1' : '0',
-            chars: fileOptions.chars ? '1' : '0',
-            words: fileOptions.words ? '1' : '0',
-            lines: fileOptions.lines ? '1' : '0',
+            byte: fileOptions.byte.activated ? "1" : "0",
+            chars: fileOptions.chars.activated ? "1" : "0",
+            words: fileOptions.words.activated ? "1" : "0",
+            lines: fileOptions.lines.activated ? "1" : "0",
           })}`
         )
       ).json();
